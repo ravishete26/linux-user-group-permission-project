@@ -1,11 +1,82 @@
-useradd ravi
-passwd ravi
+STEP 1: Create Users
+sudo useradd user10
+sudo useradd user11
 
-groupadd devops
-usermod -aG devops ravi
+sudo passwd user10
+sudo passwd user11
 
-chmod 755 file.txt
-chown ravi:devops file.txt
+👉 Verify:
 
-ln file1 hardlink
-ln -s file1 softlink
+id user10
+id user11
+🔹 STEP 2: Create Group
+sudo groupadd devteam
+
+👉 Add users:
+
+sudo usermod -aG devteam user10
+sudo usermod -aG devteam user11
+
+👉 Verify:
+
+getent group devteam
+🔹 STEP 3: Create Project Directory
+sudo mkdir /project
+
+👉 Change group ownership:
+
+sudo chown :devteam /project
+
+👉 Set permissions:
+
+sudo chmod 770 /project
+
+📌 Meaning:
+
+Owner → full access
+Group → full access
+Others → no access
+🔥 STEP 4: TEST PERMISSION (VERY IMPORTANT)
+
+Switch user:
+
+su - user10
+cd /project
+touch file1.txt   # should work ✅
+
+Switch:
+
+su - user11
+cd /project
+touch file2.txt   # should work ✅
+
+👉 Try with another user (not in group):
+❌ Permission denied (take screenshot)
+
+🔗 STEP 5: Soft Link
+touch /project/original.txt
+ln -s /project/original.txt /project/softlink.txt
+
+👉 Check:
+
+ls -l /project
+
+👉 Delete original:
+
+rm /project/original.txt
+
+👉 Soft link will break ❌
+
+🔗 STEP 6: Hard Link
+touch /project/shared.txt
+ln /project/shared.txt /home/user10/hardlink.txt
+
+👉 Verify inode:
+
+ls -li /project/shared.txt /home/user10/hardlink.txt
+
+👉 Delete original:
+
+rm /project/shared.txt
+
+👉 Hard link still works ✅
