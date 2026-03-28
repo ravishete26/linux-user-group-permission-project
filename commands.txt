@@ -1,0 +1,11 @@
+useradd ravi
+passwd ravi
+
+groupadd devops
+usermod -aG devops ravi
+
+chmod 755 file.txt
+chown ravi:devops file.txt
+
+ln file1 hardlink
+ln -s file1 softlink
